@@ -1,15 +1,21 @@
 <template>
-    <div class="resource-container">
-        <div class="resource-card" v-for="(resource, index) in resources" :key="index">
-            <h3>{{ resource.title }}</h3>
-            <div class="tags">
-                <span class="tag" v-for="tag in resource.tags" :key="tag">{{ tag }}</span>
+    <div>
+        <header class="header">
+            <h1>Coding Resources</h1>
+        </header>
+        <div class="container">
+            <div class="card" v-for="(resource, index) in resources" :key="index">
+                <h2>{{ resource.title }}</h2>
+                <p>{{ resource.description }}</p>
+                <div class="tags">
+                    <span class="tag" v-for="tag in resource.tags" :key="tag">{{ tag }}</span>
+                </div>
+                <button class="button">See More</button>
             </div>
-            <button class="see-more">See More</button>
         </div>
     </div>
 </template>
-  
+
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -31,57 +37,72 @@ export default {
     }
 };
 </script>
-  
+
 <style scoped>
-.resource-container {
+.header {
+    background-color: #000000;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+.container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
-}
-
-.resource-card {
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
 }
 
-.resource-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    color: #333333;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #666666;
 }
 
 .tags {
-    margin-bottom: 1rem;
+    margin-top: 0.5rem;
 }
 
 .tag {
     display: inline-block;
-    background: #eaeaea;
+    background-color: rgb(0, 13, 27);
+    color: white;
     padding: 0.25rem 0.5rem;
     margin-right: 0.25rem;
-    border-radius: 8px;
+    border-radius: 5px;
+    font-size: 0.85rem;
 }
 
-.see-more {
-    background-color: #007bff;
-    color: white;
+.button {
+    margin-top: auto;
     padding: 0.5rem 1rem;
+    background-color: #380303;
+    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-/* Responsive layout for smaller screens */
-@media (max-width: 1200px) {
-    .resource-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.button:hover {
+    background-color: #000000;
 }
 
 @media (max-width: 768px) {
-    .resource-container {
+    .container {
         grid-template-columns: 1fr;
     }
-}
-</style>
-  
+}</style>
