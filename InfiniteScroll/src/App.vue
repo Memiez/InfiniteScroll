@@ -13,5 +13,4 @@ export default {
 </script>
 
 <style>
-/* Your CSS here if necessary */
 </style>

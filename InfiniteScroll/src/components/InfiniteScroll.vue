@@ -1,83 +1,87 @@
 <template>
-    <div class="infinite-scroll-container">
-        <div class="cards-container">
-            <div class="card" v-for="(post, index) in posts" :key="index">
-                <h3>{{ post.title }}</h3>
-                <p>{{ post.body }}</p>
+    <div class="resource-container">
+        <div class="resource-card" v-for="(resource, index) in resources" :key="index">
+            <h3>{{ resource.title }}</h3>
+            <div class="tags">
+                <span class="tag" v-for="tag in resource.tags" :key="tag">{{ tag }}</span>
             </div>
+            <button class="see-more">See More</button>
         </div>
     </div>
 </template>
-
-<script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+  
+<script>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 export default {
-    name: 'InfiniteScroll',
     setup() {
-        const posts = ref([]);
-        const loading = ref(false);
-        const page = ref(1);
-        const perPage = 20;
+        const resources = ref([]);
 
-        const loadPosts = async () => {
-            if (loading.value) return;
-            loading.value = true;
-
+        onMounted(async () => {
             try {
-                const response = await axios.get('http://api.sampleapis.com/codingresources/codingResources', {
-                    params: {
-                        _page: page.value,
-                        _limit: perPage
-                    }
-                });
-                posts.value.push(...response.data);
-                page.value++;
+                const response = await axios.get('http://api.sampleapis.com/codingresources/codingResources');
+                resources.value = response.data;
             } catch (error) {
-                console.error('Error loading posts:', error);
-            } finally {
-                loading.value = false;
+                console.error(error);
             }
-        };
-
-        onMounted(loadPosts);
-
-        const onScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && !loading.value) {
-                loadPosts();
-            }
-        };
-
-        window.addEventListener('scroll', onScroll);
-
-        onUnmounted(() => {
-            window.removeEventListener('scroll', onScroll);
         });
 
-        return {
-            posts,
-            loading
-        };
+        return { resources };
     }
 };
 </script>
-
+  
 <style scoped>
-.infinite-scroll-container {
-    padding: 2rem;
+.resource-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
 }
 
-.cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin: -5px;
+.resource-card {
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card {
-    flex: 1 0 calc(25% - 10px);
-    margin: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 15px;
+.resource-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tags {
+    margin-bottom: 1rem;
+}
+
+.tag {
+    display: inline-block;
+    background: #eaeaea;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.25rem;
+    border-radius: 8px;
+}
+
+.see-more {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1200px) {
+    .resource-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .resource-container {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
+  
